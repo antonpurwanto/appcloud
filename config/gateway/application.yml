@@ -1,0 +1,40 @@
+server:
+    port: 10000
+zuul:
+    ignoredServices: '*'
+    routes:
+        image: /img/**
+        catalog: /catalog/**
+        onlinestore: /**
+
+security:
+    user:
+        password: none
+    oauth2:
+        client:
+            accessTokenUri: http://localhost:10003/oauth/token
+            userAuthorizationUri: http://localhost:10003/oauth/authorize
+            clientId: onlinestore
+            clientSecret: 123456
+        resource:
+            jwt:
+                keyUri: http://localhost:10003/oauth/token_key
+
+---
+spring:
+    profiles: heroku
+server:
+    port: ${PORT:0}
+
+
+
+security:
+    oauth2:
+        client:
+            accessTokenUri: https://springcloud-auth.herokuapp.com/user/oauth/token
+            userAuthorizationUri: https://springcloud-auth.herokuapp.com/user/oauth/authorize
+            clientId: onlinestore
+            clientSecret: 123456
+        resource:
+            jwt:
+                keyUri: https://springcloud-auth.herokuapp.com/user/oauth/token_key
